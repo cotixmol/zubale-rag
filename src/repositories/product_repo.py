@@ -1,6 +1,6 @@
 import asyncpg
 from src.models.query import ProductDocument
-from interfaces.product_repo_interface import ProductRepositoryInterface
+from .interfaces import ProductRepositoryInterface
 
 
 class PostgresProductRepository(ProductRepositoryInterface):

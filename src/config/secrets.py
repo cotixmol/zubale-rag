@@ -13,6 +13,7 @@ class Secrets(BaseSettings):
     DATABASE_URL: str
     EMBEDDING_MODEL_NAME: str
     LOG_LEVEL: str = "INFO"
+    CALLBACK_URL: str
 
 
 secrets = Secrets()
