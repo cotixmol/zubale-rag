@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from src.config.db import lifespan
 
-app = FastAPI(
-    title="Docker Test API",
-    lifespan=lifespan
-)
+app = FastAPI(title="Docker Test API", lifespan=lifespan)
+
 
 @app.get("/")
 async def root():
