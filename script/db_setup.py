@@ -15,7 +15,9 @@ async def initialize_database(pool: asyncpg.Pool):
     try:
         async with pool.acquire() as conn:
             async with conn.transaction():
-                logger.info(f"Loading embedding model '{secrets.EMBEDDING_MODEL_NAME}'...")
+                logger.info(
+                    f"Loading embedding model '{secrets.EMBEDDING_MODEL_NAME}'..."
+                )
                 model = SentenceTransformer(secrets.EMBEDDING_MODEL_NAME)
                 embedding_dim = model.get_sentence_embedding_dimension()
 
@@ -35,7 +37,9 @@ async def initialize_database(pool: asyncpg.Pool):
                 if product_count == 0:
                     logger.info("'products' table is empty. Seeding data...")
 
-                    embeddings = model.encode(PRODUCT_DESCRIPTIONS, show_progress_bar=True)
+                    embeddings = model.encode(
+                        PRODUCT_DESCRIPTIONS, show_progress_bar=True
+                    )
 
                     records_to_insert = [
                         (desc, str(emb.tolist()))
@@ -46,9 +50,13 @@ async def initialize_database(pool: asyncpg.Pool):
                         "INSERT INTO products (content, embedding) VALUES ($1, $2)",
                         records_to_insert,
                     )
-                    logger.info(f"Successfully seeded {len(records_to_insert)} products.")
+                    logger.info(
+                        f"Successfully seeded {len(records_to_insert)} products."
+                    )
                 else:
-                    logger.info("'products' table already contains data. Skipping seeding.")
+                    logger.info(
+                        "'products' table already contains data. Skipping seeding."
+                    )
     except Exception as e:
         logger.error(f"Database initialization failed: {e}", exc_info=True)
         raise

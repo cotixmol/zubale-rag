@@ -15,17 +15,15 @@ async def lifespan(app: FastAPI):
     Handles startup and shutdown events to manage the database connection pool.
     """
     logger.info("Attempting to connect to the database...")
-    global db_pool
     db_pool = await asyncpg.create_pool(
         dsn=secrets.DATABASE_URL, min_size=5, max_size=20
     )
-    logger.info("API Lifespan: Database connection pool created successfully.")
-
     await initialize_database(db_pool)
+
+    logger.info("Database connection pool created and seeded successfully.")
 
     yield
 
-    logger.info("API Lifespan: Shutdown event triggered.")
     if db_pool:
         await db_pool.close()
         logger.info("API Lifespan: Database connection pool closed.")
