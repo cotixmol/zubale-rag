@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI):
     """
     Handles startup and shutdown events to manage the database connection pool.
     """
-    global db_pool 
+    global db_pool
     logger.info("Attempting to connect to the database...")
     db_pool = await asyncpg.create_pool(
         dsn=secrets.DATABASE_URL, min_size=5, max_size=20

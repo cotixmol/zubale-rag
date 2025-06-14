@@ -4,14 +4,8 @@ from fastapi import FastAPI
 from src.config.db import lifespan, get_db_pool
 from src.config.queue import request_queue
 from src.api import routes
-from src.usecases.process_query import QueryProcessor
+from src.containers import AppContainer
 
-from src.repositories.product_repo import PostgresProductRepository
-from src.services import (
-    ProductRetrievalService,
-    StubbedGenerationService,
-    WebhookCallbackService,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -20,18 +14,15 @@ async def worker():
     """The background worker that processes tasks from the queue."""
     logger.info("Background worker started.")
 
-    product_repo = PostgresProductRepository(pool=get_db_pool())
-
-    query_usecase = QueryProcessor(
-        retrieval_service=ProductRetrievalService(repository=product_repo),
-        generation_service=StubbedGenerationService(),
-        callback_service=WebhookCallbackService(),
-    )
+    container = AppContainer()
+    container.product_repo.provided.db.override(get_db_pool())
 
     while True:
         try:
             request = await request_queue.get()
             logger.info(f"Worker picked up request for user: {request.user_id}")
+
+            query_usecase = container.query_processor()
 
             await query_usecase.execute(request.user_id, request.query)
 

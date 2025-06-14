@@ -1,0 +1,1 @@
+from .product_repo import PostgresProductRepository
