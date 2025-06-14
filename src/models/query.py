@@ -8,6 +8,6 @@ class QueryRequest(BaseModel):
 
 
 class ProductDocument(BaseModel):
-    id: UUID
+    id: int
     content: str
     embeddings: list[float] = Field(None, exclude=True)
