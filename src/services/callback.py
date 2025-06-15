@@ -12,6 +12,8 @@ class WebhookCallbackService(CallbackServiceInterface):
     async def send_response(self, user_id: str, answer: str):
         payload = {"user_id": user_id, "answer": answer}
 
+        logger.info(f"Payload to send: {payload}")
+
         logger.info(
             f"Sending response for user {user_id} to callback URL: {secrets.CALLBACK_URL}"
         )

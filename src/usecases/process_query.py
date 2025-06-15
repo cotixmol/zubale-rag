@@ -26,7 +26,7 @@ class QueryProcessor:
         """Executes the full RAG pipeline for a given query."""
         logger.info(f"Executing use case for user_id: {user_id}, query: '{query}'")
 
-        context_docs = self._retrieval_service.find_similar_products(query)
+        context_docs = await self._retrieval_service.find_similar_products(query)
 
         answer = self._generation_service.generate_response(context_docs, query)
 
