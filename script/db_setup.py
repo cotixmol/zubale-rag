@@ -38,7 +38,10 @@ async def initialize_database(pool: asyncpg.Pool, reset: bool = True):
                 await conn.execute(create_table_query)
                 logger.info("Table 'products' is ready.")
 
-                if reset or (await conn.fetchval("SELECT COUNT(*) FROM products;")) == 0:
+                if (
+                    reset
+                    or (await conn.fetchval("SELECT COUNT(*) FROM products;")) == 0
+                ):
                     if not reset:
                         logger.info("'products' table is empty. Seeding data...")
                     embeddings = model.encode(
