@@ -14,6 +14,7 @@ class Secrets(BaseSettings):
     EMBEDDING_MODEL_NAME: str
     LOG_LEVEL: str = "INFO"
     CALLBACK_URL: str
+    TOP_K: int = 5
 
 
 secrets = Secrets()

@@ -6,8 +6,8 @@ from .interfaces import ProductRepositoryInterface
 class PostgresProductRepository(ProductRepositoryInterface):
     """The actual implementation that talks to our PostgreSQL database."""
 
-    def __init__(self, db: asyncpg.Pool):
-        self._db = db
+    def __init__(self, db):
+        self._db = db  # db should be a valid async connection or pool
 
     async def index_documents(self, documents: list[ProductDocument]):
         async with self._db.acquire() as conn:
