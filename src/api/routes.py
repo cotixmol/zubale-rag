@@ -2,6 +2,7 @@ from fastapi import APIRouter, status, HTTPException
 from src.models.query import QueryRequest
 from src.config.queue import request_queue
 import logging
+from typing import Dict, Any
 
 logger = logging.getLogger(__name__)
 
@@ -26,3 +27,13 @@ async def accept_query(request: QueryRequest):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to enqueue request for processing.",
         )
+
+
+# --- ENDPOINT TO SIMULATE A CALLBACK ROUTE ---
+@router.post("/callback", status_code=status.HTTP_200_OK)
+async def receive_callback(payload: Dict[str, Any]):
+    """
+    A simple test endpoint to receive and log the final answer from the worker.
+    """
+    logger.info(f"Received callback with payload: {payload}")
+    return {"status": "callback received"}

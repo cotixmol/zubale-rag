@@ -14,10 +14,11 @@ class AppContainer(containers.DeclarativeContainer):
     The main Dependency Injection container for the application.
     """
 
-    config = providers.Configuration()
-    config.from_pydantic(secrets)
+    config = providers.Configuration(pydantic_settings=[secrets])
 
-    product_repo = providers.Singleton(PostgresProductRepository, db=None)
+    db_pool = providers.Singleton(object)
+
+    product_repo = providers.Singleton(PostgresProductRepository, db=db_pool)
 
     retrieval_service = providers.Factory(
         ProductRetrievalService, repository=product_repo

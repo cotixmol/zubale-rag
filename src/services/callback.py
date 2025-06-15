@@ -10,9 +10,6 @@ class WebhookCallbackService(CallbackServiceInterface):
     """Service to send the final answer to a webhook."""
 
     async def send_response(self, user_id: str, answer: str):
-        payload = {"user_id": user_id, "answer": answer}
-
-        logger.info(f"Payload to send: {payload}")
 
         logger.info(
             f"Sending response for user {user_id} to callback URL: {secrets.CALLBACK_URL}"
@@ -20,7 +17,9 @@ class WebhookCallbackService(CallbackServiceInterface):
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.post(
-                    secrets.CALLBACK_URL, json=payload, timeout=10.0
+                    secrets.CALLBACK_URL,
+                    json={"user_id": user_id, "answer": answer},
+                    timeout=10.0,
                 )
                 response.raise_for_status()
             logger.info(

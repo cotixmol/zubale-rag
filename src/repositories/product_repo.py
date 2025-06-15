@@ -20,9 +20,11 @@ class PostgresProductRepository(ProductRepositoryInterface):
         self, embedding: list[float], top_k: int
     ) -> list[ProductDocument]:
         async with self._db.acquire() as conn:
+            # Convert embedding list to string for pgvector
+            embedding_str = "[" + ",".join(str(x) for x in embedding) + "]"
             records = await conn.fetch(
                 "SELECT id, content FROM products ORDER BY embedding <=> $1 LIMIT $2",
-                embedding,
+                embedding_str,
                 top_k,
             )
             return [ProductDocument(id=r["id"], content=r["content"]) for r in records]

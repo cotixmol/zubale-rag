@@ -21,7 +21,7 @@ async def worker():
     logger.info("Background worker started.")
 
     container = AppContainer()
-    container.product_repo.provided.db.override(get_db_pool())
+    container.db_pool.override(get_db_pool())
 
     while True:
         try:
@@ -33,7 +33,7 @@ async def worker():
 
             request_queue.task_done()
         except asyncio.CancelledError:
-            logger.info("Worker shutting down.")
+            logger.info("Worker shutting down gracefully.")
             break
         except Exception:
             logger.error("An error occurred in the worker:", exc_info=True)
@@ -59,7 +59,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting background worker task.")
     worker_task = asyncio.create_task(worker())
 
-    yield  
+    yield
 
     logger.info("Application shutdown...")
 
