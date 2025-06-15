@@ -3,6 +3,7 @@ from src.models.query import QueryRequest
 from src.config.queue import request_queue
 import logging
 from typing import Dict, Any
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -35,5 +36,5 @@ async def receive_callback(payload: Dict[str, Any]):
     """
     A simple test endpoint to receive and log the final answer from the worker.
     """
-    logger.info(f"Received callback with payload: {payload}")
+    logger.info(f"Received callback with payload:\n{payload}")
     return {"status": "callback received"}

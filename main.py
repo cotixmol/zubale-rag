@@ -10,8 +10,10 @@ from src.config.secrets import secrets
 from src.api import routes
 from src.containers import AppContainer
 from script.db_setup import initialize_database
-
+from src.config.logger import setup_logging
 from src.config import db
+
+setup_logging()
 
 logger = logging.getLogger(__name__)
 

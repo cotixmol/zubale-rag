@@ -2,7 +2,6 @@ import logging
 import sys
 from .secrets import secrets
 
-
 def setup_logging():
     """
     Configures a simple, clean logger to output to the console.
