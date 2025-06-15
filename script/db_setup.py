@@ -7,9 +7,10 @@ from src.config.secrets import secrets
 logger = logging.getLogger(__name__)
 
 
-async def initialize_database(pool: asyncpg.Pool):
+async def initialize_database(pool: asyncpg.Pool, reset: bool = True):
     """
     Uses the application's connection pool to initialize the database.
+    If reset=True, drops and recreates the products table.
     """
     logger.info("Starting database initialization...")
     try:
@@ -22,6 +23,11 @@ async def initialize_database(pool: asyncpg.Pool):
                 embedding_dim = model.get_sentence_embedding_dimension()
 
                 await conn.execute("CREATE EXTENSION IF NOT EXISTS vector;")
+
+                if reset:
+                    logger.warning("Dropping and recreating 'products' table!")
+                    await conn.execute("DROP TABLE IF EXISTS products;")
+
                 create_table_query = f"""
                 CREATE TABLE IF NOT EXISTS products (
                     id SERIAL PRIMARY KEY,
@@ -29,23 +35,19 @@ async def initialize_database(pool: asyncpg.Pool):
                     embedding VECTOR({embedding_dim})
                 );
                 """
-
                 await conn.execute(create_table_query)
                 logger.info("Table 'products' is ready.")
 
-                product_count = await conn.fetchval("SELECT COUNT(*) FROM products;")
-                if product_count == 0:
-                    logger.info("'products' table is empty. Seeding data...")
-
+                if reset or (await conn.fetchval("SELECT COUNT(*) FROM products;")) == 0:
+                    if not reset:
+                        logger.info("'products' table is empty. Seeding data...")
                     embeddings = model.encode(
                         PRODUCT_DESCRIPTIONS, show_progress_bar=True
                     )
-
                     records_to_insert = [
                         (desc, str(emb.tolist()))
                         for desc, emb in zip(PRODUCT_DESCRIPTIONS, embeddings)
                     ]
-
                     await conn.executemany(
                         "INSERT INTO products (content, embedding) VALUES ($1, $2)",
                         records_to_insert,

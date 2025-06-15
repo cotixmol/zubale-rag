@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Secrets(BaseSettings):
     """
-    Loads mandatory configuration from the environment.
+    Loads secrets/configuration from the environment.
     """
 
     model_config = SettingsConfigDict(

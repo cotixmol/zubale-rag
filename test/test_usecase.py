@@ -7,7 +7,7 @@ from src.models.query import ProductDocument
 @pytest.mark.asyncio
 async def test_query_processor_orchestration():
     """
-    Tests that the QueryProcessor correctly calls its dependencies in order.
+    Tests that the QueryProcessorUseCase correctly calls its dependencies in order.
     """
     container = AppContainer()
 

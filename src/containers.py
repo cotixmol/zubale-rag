@@ -6,7 +6,7 @@ from src.services import (
     StubbedGenerationService,
     WebhookCallbackService,
 )
-from src.usecases import QueryProcessor
+from src.usecases import QueryProcessorUseCase
 
 
 class AppContainer(containers.DeclarativeContainer):
@@ -29,7 +29,7 @@ class AppContainer(containers.DeclarativeContainer):
     callback_service = providers.Factory(WebhookCallbackService)
 
     query_processor = providers.Factory(
-        QueryProcessor,
+        QueryProcessorUseCase,
         retrieval_service=retrieval_service,
         generation_service=generation_service,
         callback_service=callback_service,

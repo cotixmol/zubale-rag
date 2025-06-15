@@ -10,7 +10,7 @@ class ProductRepositoryInterface(ABC):
 
     @abstractmethod
     async def semantic_search(
-        self, embedding: list[float], top_k: int
+        self, embedding: str, top_k: int
     ) -> list[ProductDocument]:
         """Performs a semantic search to find the top_k most similar documents."""
         pass

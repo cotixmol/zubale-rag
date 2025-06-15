@@ -1,1 +1,1 @@
-from .process_query import QueryProcessor
+from .process_query import QueryProcessorUseCase

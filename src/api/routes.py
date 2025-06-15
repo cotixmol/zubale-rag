@@ -13,28 +13,29 @@ router = APIRouter()
 @router.post("/query", status_code=status.HTTP_202_ACCEPTED)
 async def accept_query(request: QueryRequest):
     """
-    Accepts a user query, validates it, and adds it to the background
-    processing queue. Responds immediately with 202 Accepted.
+    Validates an user query and adds it to the queue for processing.
+    Responds with 202 Accepted.
     """
     try:
         logger.info(
-            f"Received query for user_id: {request.user_id}. Enqueuing for processing."
+            f"Query; {request.query} - User: {request.user_id} - Enqueuing for processing."
         )
         await request_queue.put(request)
         return {"message": "Request received and is being processed."}
+
     except Exception as e:
-        logger.error(f"Failed to enqueue request: {e}", exc_info=True)
+        logger.error(f"Failed to enqueue request: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to enqueue request for processing.",
         )
 
 
-# --- ENDPOINT TO SIMULATE A CALLBACK ROUTE ---
+# This enpoint simulates the callback from the worker after processing the query.
 @router.post("/callback", status_code=status.HTTP_200_OK)
 async def receive_callback(payload: Dict[str, Any]):
     """
-    A simple test endpoint to receive and log the final answer from the worker.
+    A test endpoint to receive and log the final answer from the worker.
     """
-    logger.info(f"Received callback with payload:\n{payload}")
-    return {"status": "callback received"}
+    logger.info(f"Callback Payload:\n{payload}")
+    return {"status": "Success", "message": "Callback received successfully."}
