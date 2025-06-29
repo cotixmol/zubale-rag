@@ -74,7 +74,7 @@ Or, you can use Postman (or any API client) to send a request to the `/query` en
 ```json
 {
   "user_id": "1",
-  "query": "Videogames"
+  "query": "It's my 2 years old kid birthday."
 }
 ```
 
@@ -148,7 +148,7 @@ docker-compose down
   - **src/services/** — Contains the core logic for retrieval (vector search), generation (OpenAI calls), and callbacks.
   - **src/repositories/** — Handles all database interactions via `asyncpg`.
   - **src/config/** — Manages logging, secrets, the queue, and DB configuration.
-  - **script/db\_setup.py** — Initializes and seeds the database with product data.
+  - **script/db_setup.py** — Initializes and seeds the database with product data.
 
 -----
 
