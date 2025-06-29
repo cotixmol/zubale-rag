@@ -72,24 +72,17 @@ async def test_orchestrator_handles_no_retrieved_documents():
     ), container.callback_service.override(
         mock_callback
     ):
-        # --- Get and call the new orchestrator ---
         orchestrator = container.rag_orchestrator()
         await orchestrator.process_query(
             user_id="test_user_empty", query="a query for nothing"
         )
 
-    # --- Assertions remain the same ---
     mock_retriever.find_similar_products.assert_awaited_once()
     mock_generator.generate_response.assert_called_once_with([], "a query for nothing")
     mock_callback.send_response.assert_awaited_once_with(
         user_id="test_user_empty",
         answer="I'm sorry, I couldn't find any relevant products.",
     )
-
-
-# --- Endpoint tests do not need to change ---
-# They test the API layer, which remains untouched.
-
 
 def test_query_endpoint_returns_422_on_missing_query_field():
     response = client.post("/query", json={"user_id": "user123"})
