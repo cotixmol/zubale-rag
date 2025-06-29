@@ -6,7 +6,7 @@ from src.services import (
     OpenAIGenerationService,
     WebhookCallbackService,
 )
-from src.usecases import QueryProcessorUseCase
+from src.orchestration import LangGraphOrchestrator
 
 
 class AppContainer(containers.DeclarativeContainer):
@@ -15,7 +15,6 @@ class AppContainer(containers.DeclarativeContainer):
     """
 
     config = providers.Configuration(pydantic_settings=[secrets])
-
     db_pool = providers.Singleton(object)
 
     product_repo = providers.Singleton(PostgresProductRepository, db=db_pool)
@@ -28,8 +27,8 @@ class AppContainer(containers.DeclarativeContainer):
 
     callback_service = providers.Factory(WebhookCallbackService)
 
-    query_processor = providers.Factory(
-        QueryProcessorUseCase,
+    rag_orchestrator = providers.Factory(
+        LangGraphOrchestrator,
         retrieval_service=retrieval_service,
         generation_service=generation_service,
         callback_service=callback_service,
