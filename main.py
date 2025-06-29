@@ -25,13 +25,16 @@ async def worker():
     container = AppContainer()
     container.db_pool.override(get_db_pool())
 
+    orchestrator = container.rag_orchestrator()
+
     while True:
         try:
             request = await request_queue.get()
             logger.info(f"Worker picked up request for user: {request.user_id}")
 
-            query_usecase = container.query_processor()
-            await query_usecase.execute(request.user_id, request.query)
+            await orchestrator.process_query(
+                user_id=request.user_id, query=request.query
+            )
 
             request_queue.task_done()
         except asyncio.CancelledError:
