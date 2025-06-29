@@ -7,6 +7,7 @@ from main import app
 
 client = TestClient(app)
 
+
 @pytest.mark.asyncio
 async def test_query_processor_orchestration():
     """
@@ -80,7 +81,6 @@ async def test_query_processor_handles_no_retrieved_documents():
         )
 
     mock_retriever.find_similar_products.assert_awaited_once()
-
 
     mock_generator.generate_response.assert_called_once_with([], "a query for nothing")
 

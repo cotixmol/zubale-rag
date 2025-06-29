@@ -1,3 +1,3 @@
 from .callback import WebhookCallbackService
-from .generation import StubbedGenerationService
+from .openai_generation import OpenAIGenerationService
 from .retrieval import ProductRetrievalService

@@ -3,7 +3,7 @@ from src.config.secrets import secrets
 from src.repositories import PostgresProductRepository
 from src.services import (
     ProductRetrievalService,
-    StubbedGenerationService,
+    OpenAIGenerationService,
     WebhookCallbackService,
 )
 from src.usecases import QueryProcessorUseCase
@@ -24,7 +24,7 @@ class AppContainer(containers.DeclarativeContainer):
         ProductRetrievalService, repository=product_repo
     )
 
-    generation_service = providers.Factory(StubbedGenerationService)
+    generation_service = providers.Factory(OpenAIGenerationService)
 
     callback_service = providers.Factory(WebhookCallbackService)
 
