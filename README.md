@@ -113,11 +113,17 @@ make logs
 docker-compose logs -f api
 ```
 
-After you submit a query, you will see a log entry similar to this appear in the terminal:
+After you submit a query, you will see a log entry in the Docker terminal:
 
 ```
+{
+  "user_id": "1",
+  "query": "I want a gift for my two years old kid."
+}
+```
+```
 INFO:     Callback Payload:
-{'user_id': '1', 'response': 'Based on your needs, the "Wireless Bluetooth Headphones" would be a great choice. They feature noise-cancellation to help you block out distractions while you study and have a 20-hour battery life.'}
+{'user_id': '1', 'answer': "For your two-year-old kid, I recommend the Kids' Tablet from our catalog. It comes with parental controls, a protective case, and pre-loaded educational apps, making it a fun and safe gift option for your child."}
 ```
 
 ### 4\. Stop / Restart
